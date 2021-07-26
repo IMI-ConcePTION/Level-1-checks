@@ -52,7 +52,7 @@ ConcePTION CDM tables:
 
 **Aims of Level 1 quality checks:**      
 **1.**	To assess the integrity of the Extract-Transform-Load(ETL) process from the original data to the [ConcePTION CDM](https://docs.google.com/spreadsheets/d/1hc-TBOfEzRBthGP78ZWIa13C0RdhU7bK/edit#gid=413205035). for each Data Access Provider(DAP).        
-**2.**	To provide feedback on the integrity of the ETL to the DAP iteratively for the refinement of the DAP???s ETL procedure.       
+**2.**	To provide feedback on the integrity of the ETL to the DAP iteratively for the refinement of the DAP's ETL procedure.       
 
 
 ***Level 1 data checks review the completeness and content of each variable in each table of the D2 CDM to ensure that the required variables contain data and conform to the formats specified by the CDM specifications (e.g., data types, variable lengths, formats, acceptable values, etc.).*** 
@@ -114,7 +114,7 @@ R version 4.1.0 (2021-05-18)
 3. Put the extracted folder inside.
 4. Inside the main folder create a folder named `CDMInstances`, which will be used to store the .csv files representing the CDM tables.
 5. Inside the `CDMInstances` folder create a folder with the name of your project and inside the latter put all your .csv files.
-6. In the folder `Level_1_checks_to_be_deployed_v5.2`, go to the script 99_path.R and change the variable Studyname(line 6) to the name of your project. Make sure that the name of the folder you have created in the folder `CDMInstances` and the name of the variable match exactly. Save it.
+6. In the folder `Level_1_checks_to_be_deployed_v5.2`, go to the script 99_path.R and change the variable Studyname(line 6) to the name of your project. Make sure that the name of the folder you have created in the folder `CDMInstances` and the name of the variable match exactly. Save it.   
 7.Open the script_to_run_all.R script and you are ready to run level 1 checks.
 
 ### Current version
