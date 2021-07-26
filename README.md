@@ -1,5 +1,54 @@
-# Level 1 checks
-## R scripts to check integrity of an ETL to the ConcePTION CDM
+
+<!-- PROJECT LOGO -->
+<br />
+<p align="left">
+  <a href="https://github.com/vjolahoxhaj/Level-1-checks">
+    <img src="images/conception_logo.png" alt="Logo" width="250" height="60">
+  </a>
+  </p>
+  
+ <h3 align="center">Level 1 checks</h3>
+ <p align="center"> R scripts to check integrity of an ETL to the ConcePTION CDM </p>
+ 
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#level-1-checks">Level 1 checks</a>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#installation">Current version</a></li>
+      </ul>
+    </li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+[ConcePTION](https://www.imi-conception.eu) aims to build an ecosystem that can use Real World Data (RWD) to generate Real World Evidence (RWE) that may be used for clinical and regulatory decision making. RWE is required to address the big information gap of medication safety in pregnancy.   
+
+ConcePTION is designed to be a learning healthcare system (LHS). In the ConcePTION LHS, we have agreed upon a study-independent syntactically harmonized common data model and aim to assess the quality and fitness for purpose of data in this CDM in a study-independent way (for quality and completeness) and in study design and research question-specific ways (for fitness for purpose).
+
+ConcePTION CDM tables:
+<p align="left">
+  <a href="https://github.com/vjolahoxhaj/Level-1-checks">
+    <img src="images/conception_cdm_tables.png" alt="Logo" width="450" height="250">
+  </a>
+  </p>
+
+<!-- Level 1 checks -->
+## Level 1 checks
 
 **Aims of Level 1 quality checks:**      
 **1.**	To assess the integrity of the Extract-Transform-Load(ETL) process from the original data to the [ConcePTION CDM](https://docs.google.com/spreadsheets/d/1hc-TBOfEzRBthGP78ZWIa13C0RdhU7bK/edit#gid=413205035). for each Data Access Provider(DAP).        
@@ -49,4 +98,40 @@ Results will be displayed graphically with bar charts or line charts.
 ***Subsection:***
 Overview table with information on how counts in step 4 and 5 are being calculated.    
 
-Current version: 5.2.
+<!-- GETTING STARTED -->
+## Getting Started
+
+Follow the steps below to run Level 1 checks in your data.  
+
+### Prerequisites
+
+R version 4.1.0 (2021-05-18)
+
+### Installation
+
+1. Download the ZIP folder and extract the contents.
+2. Create a main folder with the name of your project.  
+3. Put the extracted folder inside.
+4. Inside the main folder create a folder named `CDMInstances`, which will be used to store the .csv files representing the CDM tables.
+5. Inside the `CDMInstances` folder create a folder with the name of your project and inside the latter put all your .csv files.
+6. In the folder `Level_1_checks_to_be_deployed_v5.2`, go to the script 99_path.R and change the variable Studyname(line 6) to the name of your project. Make sure that the name of the folder you have created in the folder `CDMInstances` and the name of the variable match exactly. Save it.
+7.Open the script_to_run_all.R script and you are ready to run level 1 checks.
+
+### Current version
+
+The current version of the script is 5.2.
+
+<!-- LICENSE -->
+## License
+
+Distributed under the BSD 2-Clause License License. See `LICENSE` for more information.
+
+
+
+<!-- CONTACT -->
+## Contact
+
+Vjola Hoxhaj - v.hoxhaj@umcutrecht.nl
+
+Project Link: [https://github.com/vjolahoxhaj/Level-1-checks](https://github.com/vjolahoxhaj/Level-1-checks)
+
