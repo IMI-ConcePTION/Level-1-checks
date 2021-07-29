@@ -25,6 +25,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#Data characterization study links">Data characterization study links</a></li> 
         <li><a href="#installation">Current version</a></li>
       </ul>
     </li>
@@ -51,8 +52,9 @@ ConcePTION CDM tables:
 ## Level 1 checks
 
 **Aims of Level 1 quality checks:**      
-**1.**	To assess the integrity of the Extract-Transform-Load(ETL) process from the original data to the [ConcePTION CDM](https://docs.google.com/spreadsheets/d/1hc-TBOfEzRBthGP78ZWIa13C0RdhU7bK/edit#gid=413205035). for each Data Access Provider(DAP).        
-**2.**	To provide feedback on the integrity of the ETL to the DAP iteratively for the refinement of the DAP's ETL procedure.       
+**1.**	To assess the integrity of the Extract-Transform-Load(ETL) process from the original data to the [ConcePTION CDM](https://docs.google.com/spreadsheets/d/1hc-TBOfEzRBthGP78ZWIa13C0RdhU7bK/edit#gid=413205035). for each Data Access Provider(DAP).           
+**2.**	To provide feedback on the integrity of the ETL to the DAP iteratively for the refinement of the DAP's ETL procedure.    
+**3.** 3.	To produce high-level characterization of the data which has been ETL???d to the instance of the CDM in terms of presence/absence of CDM tables and columns, missingness in key variables, frequencies of categorical variables and distribution of dates and continuous variables.   
 
 
 ***Level 1 data checks review the completeness and content of each variable in each table of the D2 CDM to ensure that the required variables contain data and conform to the formats specified by the CDM specifications (e.g., data types, variable lengths, formats, acceptable values, etc.).*** 
@@ -116,6 +118,12 @@ R version 4.1.0 (2021-05-18)
 5. Inside the `CDMInstances` folder create a folder with the name of your project and inside the latter put all your .csv files.
 6. In the folder `Level_1_checks_to_be_deployed_v5.2`, go to the script 99_path.R and change the variable Studyname(line 6) to the name of your project. Make sure that the name of the folder you have created in the folder `CDMInstances` and the name of the variable match exactly. Save it.   
 7.Open the script_to_run_all.R script and you are ready to run level 1 checks.
+
+### Data characterization study links   
+
+[Level 1 checks](https://github.com/vjolahoxhaj/Level-1-checks?organization=vjolahoxhaj&organization=vjolahoxhaj): Checking the integrity of the ETL procedure.     
+[Level 2 checks](https://github.com/IMI-ConcePTION/Level-2-checks): Checking the logical relationship of the CDM tables.    
+[Level 3 checks](https://github.com/IMI-ConcePTION/Level-3-checks): Benchamrking across DAPs and external sources.     
 
 ### Current version
 
