@@ -739,7 +739,7 @@ field_character_check<- function(tables_list, tables_CDM){
       setnames(no.mis.num, "count.V1", "no.mis_num")
       Res.form[[i]]<-merge(no.mis.orig, no.mis.num, by=c("cdm_table", "table_name", "variable_name"))
       Res.form[[i]][,non.numeric:=no.mis_num-no.mis_orig]
-      Res.form[[i]][non.numeric>0,error:=TRUE][non.numeric<0, error:=FALSE]
+      Res.form[[i]][non.numeric>0,error:=TRUE][non.numeric==0, error:=FALSE]
       
     }
     Res_field[[13]]<-Res.fld
