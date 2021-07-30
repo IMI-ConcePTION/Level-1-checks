@@ -603,7 +603,7 @@ dist.mo_unit<-cbind(variable_name="mo_source_value",distribution_mo_unit(dt=Res.
 } else {dist.mo_unit<-NULL}
 }
   rm(Res.continuous)
-  } else {dist.mo.unit<-NULL}
+  } else {dist.mo_unit<-NULL}
  
  #Results for person_id
   persons_files<-list.files(tmp, pattern="^persons")
