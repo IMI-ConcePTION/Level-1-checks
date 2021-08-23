@@ -113,7 +113,7 @@ R version 4.1.0 (2021-05-18)
 
 1. Download the ZIP folder and extract the contents.
 2. Create a main folder with the name of your project.  
-3. Put the extracted folder inside.
+3. Inside the main folder create the folder `Data characterisation`. Put the extracted folder inside.
 4. Inside the main folder create a folder named `CDMInstances`, which will be used to store the .csv files representing the CDM tables.
 5. Inside the `CDMInstances` folder create a folder with the name of your project and inside the latter put all your .csv files.
 6. In the folder `Level_1_checks_to_be_deployed_v5.2`, go to the script 99_path.R and change the variable Studyname(line 6) to the name of your project. Make sure that the name of the folder you have created in the folder `CDMInstances` and the name of the variable match exactly. Save it.   
