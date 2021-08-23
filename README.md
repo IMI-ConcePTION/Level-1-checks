@@ -119,6 +119,18 @@ R version 4.1.0 (2021-05-18)
 6. In the folder `Level_1_checks_to_be_deployed_v5.2`, go to the script 99_path.R and change the variable Studyname(line 6) to the name of your project. Make sure that the name of the folder you have created in the folder `CDMInstances` and the name of the variable match exactly. Save it.   
 7. Open the script_to_run_all.R script and you are ready to run level 1 checks.
 
+***Folder structure***
+
+Main folder
+
+ * [CDMInstances](./CDMInstances)
+   * [Project_name](./CDMInstances/Project_name)
+     * [files.csv](./CDMInstances/Project_name/files.csv)
+ * [Data characterisation](./Data characterisation)
+   * [Level_1_checks_to_be_deployed_v5.2](./Data characterisation/Level_1_checks_to_be_deployed_v5.2)
+   * [Level_2_checks_to_be_deployed2.0](./Data characterisation/Level_2_checks_to_be_deployed2.0)
+   * [Level_3_to_be_deployed1.0](./Data characterisation/Level_3_to_be_deployed1.0)
+
 ### Data characterization study links   
 
 [Level 1 checks](https://github.com/vjolahoxhaj/Level-1-checks?organization=vjolahoxhaj&organization=vjolahoxhaj): Checking the integrity of the ETL procedure.     
