@@ -185,6 +185,12 @@ check_conventions_instance<-function(dt){
 General information  
 <br> 
 
+```{r echo=F}
+Date: Sys.Date()
+Version: Level_1_checks_to_be_deployed_v5.2
+```
+
+
 Conventions for the CDM_SOURCE table:  
 **1.** This table contains only one row.    
 
@@ -402,6 +408,9 @@ if(class(INSTANCE[["date_when_data_last_updated"]]) != "Date") INSTANCE[,("date_
 if(class(INSTANCE[["since_when_data_complete"]]) != "Date") INSTANCE[,("since_when_data_complete") := as.Date(as.character(INSTANCE[["since_when_data_complete"]]), format = "%Y%m%d")]
 if(class(INSTANCE[["up_to_when_data_complete"]]) != "Date") INSTANCE[,("up_to_when_data_complete") := as.Date(as.character(INSTANCE[["up_to_when_data_complete"]]), format = "%Y%m%d")]
 datatable(INSTANCE, options = list(scrollX=TRUE))
+
+#Save instance as .csv file
+write.csv(INSTANCE, paste(cdm_inst_dir,"INSTANCE.csv",sep="") ,row.names = F)
 } else {
   print("The INSTANCE table is not provided.")
 }
@@ -418,5 +427,6 @@ datatable(INSTANCE, options = list(scrollX=TRUE))
 CDM_SOURCE and INSTANCE     
 **1.** CDM_SOURCEandINSTANCE.html: Rmarkdown report         
 **2.** `CDM_SOURCE.csv`: CDM_SOURCE original table
+**3.** `instance.CSV`: INSTANCE original table(if provided)   
 
 </div>
