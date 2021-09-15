@@ -285,6 +285,8 @@ if (fld[error==TRUE,.N]>0){
   METADATA<-fread(paste(path_dir, metadata_dir, sep=""), stringsAsFactors = F, colClasses="character")
   #Replace empty space with NA
   METADATA<-METADATA[, lapply(.SD, FUN=function(x) gsub("^$|^ $", NA, x))]
+  #Save metadata as .csv file
+write.csv(METADATA, paste(m_dir,"METADATA.csv",sep="") ,row.names = F)
 }
 rm(df)
 ```
