@@ -577,7 +577,7 @@ step_4_5_check<- function(tables_list){
   dup<-fread(paste0(tmp,dup_files[1]), sep=";")
   i<-2
   for (i in 2:length(dup_files)){
-    dup<-rbind(dup,fread(paste0(tmp,dup_files[i])), sep=";")
+    dup<-rbind(dup,fread(paste0(tmp,dup_files[i]), sep=";"))
     dup<-dup[duplicated(combination)]
   }
   dup<-dup[,.N]
