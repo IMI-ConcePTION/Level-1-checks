@@ -577,6 +577,7 @@ Res.p.c.y[,year:=as.integer(year)]
   #visit_occurrence_id  
   
   visits_files<-list.files(tmp, pattern="^visits", full.names = T)
+  if(length(visits_files)>0){
     #get size of each file
   size_visits<-lapply(visits_files, function(x) file.size(x))
   size_visits<-do.call(rbind,size_visits)
@@ -587,7 +588,7 @@ Res.p.c.y[,year:=as.integer(year)]
   size_visits<-size_visits[order(size)]
   #get number of persons files
   length_visits_files<-size_visits[,.N]
-
+}
   
   #stratified by meaning
   if(length(visits_files)>1){
