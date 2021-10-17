@@ -546,41 +546,53 @@ step_4_5_check<- function(tables_list){
 
   Res.convention<- data.table(table_name="VISIT_OCCURRENCE", convention_check_visit(visits_files))
    
-  #Results for person_id
-   persons_files<-list.files(tmp, pattern="^persons")
+ #Results for person_id
+  #load all person id files
+  persons_files<-list.files(tmp, pattern="^persons", full.names = T)
+  #get size of each file
+  size_persons<-lapply(persons_files, function(x) file.size(x))
+  size_persons<-do.call(rbind,size_persons)
+  size_persons<-data.table(file=persons_files, size_persons)
+  setnames(size_persons, names(size_persons)[2], "size")
+  size_persons[,size:=as.numeric(size)]
+  #order files by size
+  size_persons<-size_persons[order(size)]
+  #get number of persons files
+  length_persons_files<-size_persons[,.N]
+
   #stratified by meaning
   if (length(persons_files)>1){
-  Res.p.c<-fread(paste0(tmp,persons_files[1]))
+  Res.p.c<-fread(size_persons[length_persons_files,file])
   Res.p.c[, comb:=paste(person_id, meaning_of_visit, sep="_^_")][!duplicated(comb)]
-i<-2
-  for (i in 2:length(persons_files)){
-    a<-fread(paste0(tmp,persons_files[i]))
+  for (i in 1:(length_persons_files-1)){
+    a<-fread(size_persons[i,file])
     a<-a[, comb:=paste(person_id, meaning_of_visit, sep="_^_")][!duplicated(comb)]
     Res.p.c<-rbind(Res.p.c,a)
     Res.p.c<-Res.p.c[!duplicated(comb)]
     rm(a)
   }
+  
   Res.p.c[,comb:=NULL]
-    Res.p.c<-data.table(variable_name="person_id",Res.p.c[!is.na(meaning_of_visit), .(count=.N), by="meaning_of_visit"])
-     names(Res.p.c)<-c("variable_name", "meaning", "count")
+  Res.p.c<-data.table(variable_name="person_id",Res.p.c[!is.na(meaning_of_visit), .(count=.N), by="meaning_of_visit"])
+  names(Res.p.c)<-c("variable_name", "meaning", "count")
   Res.p.t<-do.call(rbind, Res.p.t)
   Res.p.t<-sum(Res.p.t)
    
   #stratified by meaning and year
-  Res.p.c.y<-fread(paste0(tmp,persons_files[1]))
+  Res.p.c.y<-fread(size_persons[length_persons_files,file])
   Res.p.c.y[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("person_id", "year", "meaning_of_visit")])][!duplicated(comb_y)]
-i<-2
-  for (i in 2:length(persons_files)){
-    a<-fread(paste0(tmp,persons_files[i]))
+  for (i in 1:(length_persons_files-1)){
+    a<-fread(size_persons[i,file])
     a<-a[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("person_id", "year", "meaning_of_visit")])][!duplicated(comb_y)]
     Res.p.c.y<-rbind(Res.p.c.y,a)
     Res.p.c.y<-Res.p.c.y[!duplicated(comb_y)]
     rm(a)
   }
+  
   Res.p.c.y[,comb_y:=NULL]
-        Res.p.c.y<-cbind(variable_name="person_id", Res.p.c.y[!is.na(meaning_of_visit), .(count=.N), by=.(meaning_of_visit, year)])
+  Res.p.c.y<-cbind(variable_name="person_id", Res.p.c.y[!is.na(meaning_of_visit), .(count=.N), by=.(meaning_of_visit, year)])
   Res.p.c.y<-Res.p.c.y[!is.na(year)]
-Res.p.c.y[,year:=as.integer(year)]
+  Res.p.c.y[,year:=as.integer(year)]
   Res.p.t.y<-do.call(rbind, Res.p.t.y)
   names(Res.p.t.y)<-c("year", "total")
   Res.p.t.y<-Res.p.t.y[,lapply(.SD, sum), .SDcols=c("total"), by=.(year)]
@@ -598,17 +610,17 @@ Res.p.c.y[,year:=as.integer(year)]
   } 
   
   if(length(persons_files)==1){
-  Res.p.c<-fread(paste0(tmp,persons_files))
+  Res.p.c<-fread(persons_files)
   Res.p.c[, comb:=paste(person_id, meaning_of_visit, sep="_^_")][!duplicated(comb)]
   Res.p.c[,comb:=NULL]
   
   Res.p.c<-data.table(variable_name="person_id",Res.p.c[!is.na(meaning_of_visit), .(count=.N), by="meaning_of_visit"])
-     names(Res.p.c)<-c("variable_name", "meaning", "count")
+  names(Res.p.c)<-c("variable_name", "meaning", "count")
   Res.p.t<-do.call(rbind, Res.p.t)
   Res.p.t<-sum(Res.p.t)
    
   #stratified by meaning and year
-  Res.p.c.y<-fread(paste0(tmp,persons_files))
+  Res.p.c.y<-fread(persons_files)
   Res.p.c.y[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("person_id", "year", "meaning_of_visit")])][!duplicated(comb_y)]
   
   Res.p.c.y[,comb_y:=NULL]
@@ -631,32 +643,43 @@ Res.p.c.y[,year:=as.integer(year)]
   rm(Res.p.c.y, Res.p.t.y)
 }
   #visit_occurrence_id  
-
+  
+  visits_files<-list.files(tmp, pattern="^visits", full.names = T)
+    #get size of each file
+  if (length(visits_files)>0){
+  size_visits<-lapply(visits_files, function(x) file.size(x))
+  size_visits<-do.call(rbind,size_visits)
+  size_visits<-data.table(file=visits_files, size_visits)
+  setnames(size_visits, names(size_visits)[2], "size")
+  size_visits[,size:=as.numeric(size)]
+  #order files by size
+  size_visits<-size_visits[order(size)]
+  #get number of persons files
+  length_visits_files<-size_visits[,.N]
+}
   
   #stratified by meaning
   if(length(visits_files)>1){
-  Res.v.c<-fread(paste0(tmp,visits_files[1]))
+  Res.v.c<-fread(size_visits[length_visits_files,file])
   Res.v.c[, comb:=paste(visit_occurrence_id, meaning_of_visit, sep="_^_")][!duplicated(comb)]
-i<-2
-  for (i in 2:length(visits_files)){
-    a<-fread(paste0(tmp,visits_files[i]))
+  for (i in 1:(length_visits_files-1)){
+    a<-fread(size_visits[i,file])
     a<-a[, comb:=paste(visit_occurrence_id, meaning_of_visit, sep="_^_")][!duplicated(comb)]
     Res.v.c<-rbind(Res.v.c,a)
     Res.v.c<-Res.v.c[!duplicated(comb)]
     rm(a)
   }
   Res.v.c[,comb:=NULL]
-    Res.v.c<-data.table(variable_name="visit_occurrence_id",Res.v.c[!is.na(meaning_of_visit), .(count=.N), by="meaning_of_visit"])
-     names(Res.v.c)<-c("variable_name", "meaning", "count")
+  Res.v.c<-data.table(variable_name="visit_occurrence_id",Res.v.c[!is.na(meaning_of_visit), .(count=.N), by="meaning_of_visit"])
+  names(Res.v.c)<-c("variable_name", "meaning", "count")
   Res.v.t<-do.call(rbind, Res.v.t)
   Res.v.t<-sum(Res.v.t)
   
   #stratified by meaning and year
-  Res.v.c.y<-fread(paste0(tmp,visits_files[1]))[!is.na(year)]
+  Res.v.c.y<-fread(size_visits[length_visits_files,file])[!is.na(year)]
   Res.v.c.y[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("visit_occurrence_id", "year", "meaning_of_visit")])][!duplicated(comb_y)]
-i<-2
-  for (i in 2:length(visits_files)){
-    a<-fread(paste0(tmp,visits_files[i]))
+  for (i in 1:(length_visits_files-1)){
+    a<-fread(size_visits[i,file])
     a<-a[!is.na(year)][, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("visit_occurrence_id", "year", "meaning_of_visit")])][!duplicated(comb_y)]
     Res.v.c.y<-rbind(Res.v.c.y,a)
     Res.v.c.y<-Res.v.c.y[!duplicated(comb_y)]
@@ -682,7 +705,7 @@ Res.v.c.y[,year:=as.integer(year)]
       }
   
 if (length(visits_files)==1) {
-  Res.v.c<-fread(paste0(tmp,visits_files))
+  Res.v.c<-fread(visits_files)
   Res.v.c[, comb:=paste(visit_occurrence_id, meaning_of_visit, sep="_^_")][!duplicated(comb)]
 Res.v.c[,comb:=NULL]
     Res.v.c<-data.table(variable_name="visit_occurrence_id",Res.v.c[!is.na(meaning_of_visit), .(count=.N), by="meaning_of_visit"])
@@ -691,7 +714,7 @@ Res.v.c[,comb:=NULL]
   Res.v.t<-sum(Res.v.t)
   
   #stratified by meaning and year
-  Res.v.c.y<-fread(paste0(tmp,visits_files))[!is.na(year)]
+  Res.v.c.y<-fread(visits_files)[!is.na(year)]
   Res.v.c.y[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("visit_occurrence_id", "year", "meaning_of_visit")])][!duplicated(comb_y)]
 Res.v.c.y[,comb_y:=NULL]
   Res.v.c.y<-cbind(variable_name="visit_occurrence_id", Res.v.c.y[!is.na(meaning_of_visit), .(count=.N), by=.(meaning_of_visit, year)])
@@ -716,6 +739,7 @@ if(length(visits_files)==0) {
   Res.v<-NULL
   Res.v.y<-NULL
 }
+
  
   i<-1
   #Combine results for counts by meaning(other variables)

@@ -197,15 +197,27 @@ step_4_5_check<- function(tables_list){
   }
   rm(dup_files)
   
-  #Results for person_id
-  persons_files<-list.files(tmp, pattern="^persons")
+   #Results for person_id
+   #Results for person_id
+  #load all person id files
+  persons_files<-list.files(tmp, pattern="^persons", full.names = T)
+  #get size of each file
+  size_persons<-lapply(persons_files, function(x) file.size(x))
+  size_persons<-do.call(rbind,size_persons)
+  size_persons<-data.table(file=persons_files, size_persons)
+  setnames(size_persons, names(size_persons)[2], "size")
+  size_persons[,size:=as.numeric(size)]
+  #order files by size
+  size_persons<-size_persons[order(size)]
+  #get number of persons files
+  length_persons_files<-size_persons[,.N]
+
   #stratified by meaning
   if (length(persons_files)>1){
-  Res.p.c<-fread(paste0(tmp,persons_files[1]))
+  Res.p.c<-fread(size_persons[length_persons_files,file])
   Res.p.c[, comb:=paste(person_id, meaning_of_relationship, sep="_^_")][!duplicated(comb)]
-i<-2
-  for (i in 2:length(persons_files)){
-    a<-fread(paste0(tmp,persons_files[i]))
+  for (i in 1:(length_persons_files-1)){
+    a<-fread(size_persons[i,file])
     a<-a[, comb:=paste(person_id, meaning_of_relationship, sep="_^_")][!duplicated(comb)]
     Res.p.c<-rbind(Res.p.c,a)
     Res.p.c<-Res.p.c[!duplicated(comb)]
@@ -224,7 +236,7 @@ i<-2
   } 
   
   if(length(persons_files)==1){
-  Res.p.c<-fread(paste0(tmp,persons_files))
+  Res.p.c<-fread(persons_files)
   Res.p.c[, comb:=paste(person_id, meaning_of_relationship, sep="_^_")][!duplicated(comb)]
   Res.p.c[,comb:=NULL]
   
@@ -240,15 +252,25 @@ i<-2
 }
   #related_id  
   
-  related_files<-list.files(tmp, pattern="^related")
-  
+  related_files<-list.files(tmp, pattern="^related", full.names = T)
+  if (length(related_files)>0){
+  size_related<-lapply(related_files, function(x) file.size(x))
+  size_related<-do.call(rbind,size_related)
+  size_related<-data.table(file=related_files, size_related)
+  setnames(size_related, names(size_related)[2], "size")
+  size_related[,size:=as.numeric(size)]
+  #order files by size
+  size_related<-size_related[order(size)]
+  #get number of persons files
+  length_related_files<-size_related[,.N]
+}
+
   #stratified by meaning
   if(length(related_files)>1){
-  Res.r.c<-fread(paste0(tmp,related_files[1]))
+  Res.r.c<-fread(size_related[length_related_files,file])
   Res.r.c[, comb:=paste(related_id, meaning_of_relationship, sep="_^_")][!duplicated(comb)]
-i<-2
-  for (i in 2:length(related_files)){
-    a<-fread(paste0(tmp,related_files[i]))
+  for (i in 1:(length_related_files-1)){
+    a<-fread(size_related[i,file])
     a<-a[, comb:=paste(related_id, meaning_of_relationship, sep="_^_")][!duplicated(comb)]
     Res.r.c<-rbind(Res.r.c,a)
     Res.r.c<-Res.r.c[!duplicated(comb)]
@@ -265,7 +287,7 @@ i<-2
       }
   
 if (length(related_files)==1) {
-  Res.r.c<-fread(paste0(tmp,related_files))
+  Res.r.c<-fread(related_files)
   Res.r.c[, comb:=paste(related_id, meaning_of_relationship, sep="_^_")][!duplicated(comb)]
 Res.r.c[,comb:=NULL]
     Res.r.c<-data.table(variable_name="related_id",Res.r.c[!is.na(meaning_of_relationship), .(count=.N), by="meaning_of_relationship"])
@@ -280,7 +302,6 @@ Res.r.c[,comb:=NULL]
   
 if(length(related_files)==0){
   Res.r<-NULL
-
 }
  
 #Counts stratified by meaning(other variables)
@@ -291,6 +312,8 @@ if(length(related_files)==0){
     Res.4.1<-Res.p
   rm(Res.p)
   }
+ 
+
   i<-1
   #Combine counts by meaning(2 or more categories)
  Res.4.3.c<-vector(mode="list", length=length(Res.4.3))

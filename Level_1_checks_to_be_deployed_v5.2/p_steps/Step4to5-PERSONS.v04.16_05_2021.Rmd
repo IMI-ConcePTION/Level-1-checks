@@ -338,13 +338,25 @@ step_4_5_check<- function(tables_list){
   rm(dup_files)
    
      
-  persons_files<-list.files(tmp, pattern="^persons")
+    #Results for person_id
+  #load all person id files
+  persons_files<-list.files(tmp, pattern="^persons", full.names = T)
+  #get size of each file
+  size_persons<-lapply(persons_files, function(x) file.size(x))
+  size_persons<-do.call(rbind,size_persons)
+  size_persons<-data.table(file=persons_files, size_persons)
+  setnames(size_persons, names(size_persons)[2], "size")
+  size_persons[,size:=as.numeric(size)]
+  #order files by size
+  size_persons<-size_persons[order(size)]
+  #get number of persons files
+  length_persons_files<-size_persons[,.N]
+
   
   if (length(persons_files)>1){
-  Res.con<-fread(paste0(tmp,persons_files[1]))
-i<-2
-  for (i in 2:length(persons_files)){
-    a<-fread(paste0(tmp,persons_files[i]))
+  Res.con<-fread(size_persons[length_persons_files,file])
+  for (i in 1:(length_persons_files-1)){
+    a<-fread(size_persons[i,file])
     Res.con<-rbind(Res.con,a)
     rm(a)
   }
@@ -352,21 +364,21 @@ Res.con<-Res.con[duplicated(person_id),.N]
   } 
   
     if (length(persons_files)==1){
-  Res.con<-fread(paste0(tmp,persons_files))
+  Res.con<-fread(persons_files)
   Res.con<-Res.con[duplicated(person_id),.N]
     } 
   Res.convention<-convention_check_persons(pers_dt = Res.con)
   rm(Res.con)
   
+  
   #Results for person_id
 
   #stratified by year
   if (length(persons_files)>1){
-  Res.p.c<-fread(paste0(tmp,persons_files[1]))
+  Res.p.c<-fread(size_persons[length_persons_files,file])
   Res.p.c<-Res.p.c[!duplicated(person_id)]
-i<-2
-  for (i in 2:length(persons_files)){
-    a<-fread(paste0(tmp,persons_files[i]))
+  for (i in 1:(length_persons_files-1)){
+    a<-fread(size_persons[i,file])
     a<-a[!duplicated(person_id)]
     Res.p.c<-rbind(Res.p.c,a)
     Res.p.c<-Res.p.c[!duplicated(person_id)]
@@ -382,7 +394,7 @@ i<-2
   } 
   
   if(length(persons_files)==1){
-  Res.p.c<-fread(paste0(tmp,persons_files))
+  Res.p.c<-fread(persons_files)
   Res.p.c<-Res.p.c[!duplicated(person_id)]
   
   Res.p.c<-data.table(variable_name="person_id",Res.p.c[, .(count=.N), by="year_of_birth"])
@@ -392,7 +404,7 @@ i<-2
   Res.p<-data.table(Res.p.c, total=Res.p.t) #results stratified by meaning
   rm(Res.p.c, Res.p.t)
   }
-  
+    
 i<-1
      #Combine results for counts by year(other variables)
   Res.4.1.c<-vector(mode="list", length=length(Res.4.1))

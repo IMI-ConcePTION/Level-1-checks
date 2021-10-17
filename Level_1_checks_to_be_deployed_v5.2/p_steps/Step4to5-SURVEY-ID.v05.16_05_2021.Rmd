@@ -443,13 +443,25 @@ rm(df)
   rm(dup_files)
   
   #Convention check
-  pers_surv_files<-list.files(tmp, pattern="^pers_surv_")
+
+  #load all pers_surv_ files
+  pers_surv_files<-list.files(tmp, pattern="^pers_surv_", full.names = T)
+  #get size of each file
+  size_pers_surv<-lapply(pers_surv_files, function(x) file.size(x))
+  size_pers_surv<-do.call(rbind,size_pers_surv)
+  size_pers_surv<-data.table(file=pers_surv_files, size_pers_surv)
+  setnames(size_pers_surv, names(size_pers_surv)[2], "size")
+  size_pers_surv[,size:=as.numeric(size)]
+  #order files by size
+  size_pers_surv<-size_pers_surv[order(size)]
+  #get number of persons files
+  length_pers_surv_files<-size_pers_surv[,.N]
+
   if(length(pers_surv_files)>1){
-  Res.con<-fread(paste0(tmp,pers_surv_files[1]))
+  Res.con<-fread(size_pers_surv[length_pers_surv_files,file])
   Res.con<-Res.con[!duplicated(combination)]
-i<-2
-  for (i in 2:length(pers_surv_files)){
-    a<-fread(paste0(tmp,pers_surv_files[i]))
+  for (i in 1:(length_pers_surv_files-1)){
+    a<-fread(size_pers_surv[i,file])
     a<-a[!duplicated(combination)]
     Res.con<-rbind(Res.con,a)
     Res.con<-Res.con[!duplicated(combination)]
@@ -457,7 +469,7 @@ i<-2
   }}
   
   if(length(pers_surv_files)==1){
-  Res.con<-fread(paste0(tmp,pers_surv_files))
+  Res.con<-fread(pers_surv_files)
   Res.con<-Res.con[!duplicated(combination)]
   }
 
@@ -465,40 +477,53 @@ i<-2
   rm(pers_surv_files,Res.con)
   
 #Results for person_id
-  persons_files<-list.files(tmp, pattern="^persons")
+    #Results for person_id
+  #load all person id files
+  persons_files<-list.files(tmp, pattern="^persons", full.names = T)
+  #get size of each file
+  size_persons<-lapply(persons_files, function(x) file.size(x))
+  size_persons<-do.call(rbind,size_persons)
+  size_persons<-data.table(file=persons_files, size_persons)
+  setnames(size_persons, names(size_persons)[2], "size")
+  size_persons[,size:=as.numeric(size)]
+  #order files by size
+  size_persons<-size_persons[order(size)]
+  #get number of persons files
+  length_persons_files<-size_persons[,.N]
+
   #stratified by meaning
   if (length(persons_files)>1){
-  Res.p.c<-fread(paste0(tmp,persons_files[1]))
+  Res.p.c<-fread(size_persons[length_persons_files,file])
   Res.p.c[, comb:=paste(person_id, survey_meaning, sep="_^_")][!duplicated(comb)]
-i<-2
-  for (i in 2:length(persons_files)){
-    a<-fread(paste0(tmp,persons_files[i]))
+  for (i in 1:(length_persons_files-1)){
+    a<-fread(size_persons[i,file])
     a<-a[, comb:=paste(person_id, survey_meaning, sep="_^_")][!duplicated(comb)]
     Res.p.c<-rbind(Res.p.c,a)
     Res.p.c<-Res.p.c[!duplicated(comb)]
     rm(a)
   }
+  
   Res.p.c[,comb:=NULL]
-    Res.p.c<-data.table(variable_name="person_id",Res.p.c[!is.na(survey_meaning), .(count=.N), by="survey_meaning"])
-     names(Res.p.c)<-c("variable_name", "meaning", "count")
+  Res.p.c<-data.table(variable_name="person_id",Res.p.c[!is.na(survey_meaning), .(count=.N), by="survey_meaning"])
+  names(Res.p.c)<-c("variable_name", "meaning", "count")
   Res.p.t<-do.call(rbind, Res.p.t)
   Res.p.t<-sum(Res.p.t)
    
   #stratified by meaning and year
-  Res.p.c.y<-fread(paste0(tmp,persons_files[1]))
+  Res.p.c.y<-fread(size_persons[length_persons_files,file])
   Res.p.c.y[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("person_id", "year", "survey_meaning")])][!duplicated(comb_y)]
-i<-2
-  for (i in 2:length(persons_files)){
-    a<-fread(paste0(tmp,persons_files[i]))
+  for (i in 1:(length_persons_files-1)){
+    a<-fread(size_persons[i,file])
     a<-a[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("person_id", "year", "survey_meaning")])][!duplicated(comb_y)]
     Res.p.c.y<-rbind(Res.p.c.y,a)
     Res.p.c.y<-Res.p.c.y[!duplicated(comb_y)]
     rm(a)
   }
+  
   Res.p.c.y[,comb_y:=NULL]
-        Res.p.c.y<-cbind(variable_name="person_id", Res.p.c.y[!is.na(survey_meaning), .(count=.N), by=.(survey_meaning, year)])
+  Res.p.c.y<-cbind(variable_name="person_id", Res.p.c.y[!is.na(survey_meaning), .(count=.N), by=.(survey_meaning, year)])
   Res.p.c.y<-Res.p.c.y[!is.na(year)]
-Res.p.c.y[,year:=as.integer(year)]
+  Res.p.c.y[,year:=as.integer(year)]
   Res.p.t.y<-do.call(rbind, Res.p.t.y)
   names(Res.p.t.y)<-c("year", "total")
   Res.p.t.y<-Res.p.t.y[,lapply(.SD, sum), .SDcols=c("total"), by=.(year)]
@@ -516,17 +541,17 @@ Res.p.c.y[,year:=as.integer(year)]
   } 
   
   if(length(persons_files)==1){
-  Res.p.c<-fread(paste0(tmp,persons_files))
+  Res.p.c<-fread(persons_files)
   Res.p.c[, comb:=paste(person_id, survey_meaning, sep="_^_")][!duplicated(comb)]
   Res.p.c[,comb:=NULL]
   
   Res.p.c<-data.table(variable_name="person_id",Res.p.c[!is.na(survey_meaning), .(count=.N), by="survey_meaning"])
-     names(Res.p.c)<-c("variable_name", "meaning", "count")
+  names(Res.p.c)<-c("variable_name", "meaning", "count")
   Res.p.t<-do.call(rbind, Res.p.t)
   Res.p.t<-sum(Res.p.t)
    
   #stratified by meaning and year
-  Res.p.c.y<-fread(paste0(tmp,persons_files))
+  Res.p.c.y<-fread(persons_files)
   Res.p.c.y[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("person_id", "year", "survey_meaning")])][!duplicated(comb_y)]
   
   Res.p.c.y[,comb_y:=NULL]
@@ -552,14 +577,24 @@ Res.p.c.y[,year:=as.integer(year)]
 
   #stratified by meaning
   
-  surv_id_files<-list.files(tmp, pattern="^surv_id_")
+  surv_id_files<-list.files(tmp, pattern="^surv_id_", full.names = T)
+    if (length(surv_id_files)>0){
+  size_surv_id<-lapply(surv_id_files, function(x) file.size(x))
+  size_surv_id<-do.call(rbind,size_surv_id)
+  size_surv_id<-data.table(file=surv_id_files, size_surv_id)
+  setnames(size_surv_id, names(size_surv_id)[2], "size")
+  size_surv_id[,size:=as.numeric(size)]
+  #order files by size
+  size_surv_id<-size_surv_id[order(size)]
+  #get number of persons files
+  length_surv_id_files<-size_surv_id[,.N]
+}
   
   if(length(surv_id_files)>1){
-  Res.s.c<-fread(paste0(tmp,surv_id_files[1]))
+  Res.s.c<-fread(size_surv_id[length_surv_id_files,file])
   Res.s.c[, comb:=paste(survey_id, survey_meaning, sep="_^_")][!duplicated(comb)]
-i<-2
-  for (i in 2:length(surv_id_files)){
-    a<-fread(paste0(tmp,surv_id_files[i]))
+  for (i in 1:(length_surv_id_files-1)){
+    a<-fread(size_surv_id[i,file])
     a<-a[, comb:=paste(survey_id, survey_meaning, sep="_^_")][!duplicated(comb)]
     Res.s.c<-rbind(Res.s.c,a)
     Res.s.c<-Res.s.c[!duplicated(comb)]
@@ -572,11 +607,10 @@ i<-2
   Res.s.t<-sum(Res.s.t)
   
   #stratified by meaning and year
-  Res.s.c.y<-fread(paste0(tmp,surv_id_files[1]))[!is.na(year)]
+  Res.s.c.y<-fread(size_surv_id[length_surv_id_files,file])[!is.na(year)]
   Res.s.c.y[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("survey_id", "year", "survey_meaning")])][!duplicated(comb_y)]
-i<-2
-  for (i in 2:length(surv_id_files)){
-    a<-fread(paste0(tmp,surv_id_files[i]))
+  for (i in 1:(length_surv_id_files-1)){
+    a<-fread(size_surv_id[i,file])
     a<-a[!is.na(year)][, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("survey_id", "year", "survey_meaning")])][!duplicated(comb_y)]
     Res.s.c.y<-rbind(Res.s.c.y,a)
     Res.s.c.y<-Res.s.c.y[!duplicated(comb_y)]
@@ -602,7 +636,7 @@ Res.s.c.y[,year:=as.integer(year)]
       }
   
 if (length(surv_id_files)==1) {
-  Res.s.c<-fread(paste0(tmp,surv_id_files))
+  Res.s.c<-fread(surv_id_files)
   Res.s.c[, comb:=paste(survey_id, survey_meaning, sep="_^_")][!duplicated(comb)]
 Res.s.c[,comb:=NULL]
     Res.s.c<-data.table(variable_name="survey_id",Res.s.c[!is.na(survey_meaning), .(count=.N), by="survey_meaning"])
@@ -611,7 +645,7 @@ Res.s.c[,comb:=NULL]
   Res.s.t<-sum(Res.s.t)
   
   #stratified by meaning and year
-  Res.s.c.y<-fread(paste0(tmp,surv_id_files))[!is.na(year)]
+  Res.s.c.y<-fread(surv_id_files)[!is.na(year)]
   Res.s.c.y[, comb_y := Reduce(function(...) paste(..., sep = "_^_"), .SD[, c("survey_id", "year", "survey_meaning")])][!duplicated(comb_y)]
 Res.s.c.y[,comb_y:=NULL]
   Res.s.c.y<-cbind(variable_name="survey_id", Res.s.c.y[!is.na(survey_meaning), .(count=.N), by=.(survey_meaning, year)])
@@ -636,6 +670,7 @@ if(length(surv_id_files)==0) {
   Res.s<-NULL
   Res.s.y<-NULL
 }
+  
   i<-1
   #Combine counts by meaning(2 or more categories)
 Res.4.3<-compact(Res.4.3)
