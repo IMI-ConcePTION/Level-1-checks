@@ -52,9 +52,9 @@ ConcePTION CDM tables:
 ## Level 1 checks
 
 **Aims of Level 1 quality checks:**      
-**1.**	To assess the integrity of the Extract-Transform-Load(ETL) process from the original data to the [ConcePTION CDM](https://docs.google.com/spreadsheets/d/1hc-TBOfEzRBthGP78ZWIa13C0RdhU7bK/edit#gid=413205035). for each Data Access Provider(DAP).           
+**1.**	To assess the integrity of the Extract-Transform-Load (ETL) process from the original data to the [ConcePTION CDM](https://docs.google.com/spreadsheets/d/1hc-TBOfEzRBthGP78ZWIa13C0RdhU7bK/edit#gid=413205035) for each Data Access Provider (DAP).           
 **2.**	To provide feedback on the integrity of the ETL to the DAP iteratively for the refinement of the DAP's ETL procedure.    
-**3.** 3.	To produce high-level characterization of the data which has been ETL???d to the instance of the CDM in terms of presence/absence of CDM tables and columns, missingness in key variables, frequencies of categorical variables and distribution of dates and continuous variables.   
+**3.**  To produce high-level characterization of the data which has been ETL'd to the instance of the CDM in terms of presence/absence of CDM tables and columns, missingness in key variables, frequencies of categorical variables and distribution of dates and continuous variables.   
 
 
 ***Level 1 data checks review the completeness and content of each variable in each table of the D2 CDM to ensure that the required variables contain data and conform to the formats specified by the CDM specifications (e.g., data types, variable lengths, formats, acceptable values, etc.).*** 
@@ -79,10 +79,10 @@ Missing data stratified by meaning and calendar year will be displayed using hea
 
 ***Step 3: Dates check***     
 Check if dates are in the correct format (8 characters).      
-Check if date variables contain allowable values:    
-Year: 1995-present (exception for dates that represent end of follow up where years in the future will be allowed.)    
-Month: 01-12    
-Day: 01-31    
+Check if date variables contain allowable values, e.g:    
+   * Year: 1995-present (exception for dates that represent end of follow up where years in the future will be allowed.)    
+   * Month: 01-12    
+   * Day: 01-31    
 
 ***Step 4: Check conventions and construct frequency tables of other and categorical variables.***    
 Check if the table of interest contains any duplicate rows.    
@@ -111,27 +111,38 @@ R version 4.1.0 (2021-05-18)
 
 ### Installation
 
-1. Download the ZIP folder and extract the contents.
-2. Create a main folder with the name of your project.  
-3. Inside the main folder create the folder `Data characterisation`. Put the extracted folder inside.
-4. Inside the main folder create a folder named `CDMInstances`, which will be used to store the .csv files representing the CDM tables.
-5. Inside the `CDMInstances` folder create a folder with the name of your project and inside the latter put all your .csv files.
-6. In the folder `Level_1_checks_to_be_deployed_v5.2`, go to the script 99_path.R and change the variable Studyname(line 6) to the name of your project. Make sure that the name of the folder you have created in the folder `CDMInstances` and the name of the variable match exactly. Save it.   
-7. Open the script_to_run_all.R script and you are ready to run level 1 checks.
+Installation steps for Level 1 check: 
 
-***Folder structure***
+1.	Go to the GitHub page of Level 1 check
+2.	Click the green button **Code** on the top of the GitHub page, download the ZIP folder using the **Download ZIP** button and extract the contents. Remember where you stored the extracted ZIP folder on your computer, you will use it later.
+3.	Create a main folder with the name of your project (`Project_name`). We suggest to use a clear and short name, only using lower-case letters.
+4.	Create the folder `Data characterisation` inside the main folder `Project_name`. 
+5.	Copy the folder `Level_1_checks_to_be_deployed_v5.2` from the extracted folder zip file that we downloaded in step 1 inside the new folder `Data characterisation`. 
+6.	Create a folder named `CDMInstances` inside the main folder `Project_name`, which will be used to store the .csv files representing the CDM tables.
+7.	Create a folder with the name of your project inside the `CDMInstances` folder (use the same name as in Step 2).
+8.	Copy all your .csv data files (that follow the Common Data Model) within the folder created in Step 7.
+9.	Go to the script *99_path.R* in the folder `Level_1_checks_to_be_deployed_v5.2`, and change the variable Studyname (line 6 in the code) to the name of your project. Make sure that the name of the folder created in the folder `CDMInstances` and the name of the variable match exactly. Save it.
+10.	Open the *script_to_run_all.R*  script in **R-studio** and you are ready to run level 1 checks.
 
-Main folder
 
- * [CDMInstances](./CDMInstances)
-   * [Project_name](./CDMInstances/Project_name)
-     * [files.csv](./CDMInstances/Project_name/files.csv)
-     
- * [Data characterisation](./Data characterisation)
-   * [Level_1_checks_to_be_deployed_v5.2](./Data characterisation/Level_1_checks_to_be_deployed_v5.2)
-   * [Level_2_checks_to_be_deployed2.0](./Data characterisation/Level_2_checks_to_be_deployed2.0)
-   * [Level_3_to_be_deployed1.0](./Data characterisation/Level_3_to_be_deployed1.0)
+**Folder structure**
 
+* [Project_name](./Project_name) (Main Folder)
+
+    * [CDMInstances](./CDMInstances)
+        * [Project_name](./CDMInstances/Project_name)
+            * [files.csv](./CDMInstances/Project_name/files.csv) (here your files)    
+     * [Data characterisation](./Data characterisation) 
+       * [Level_1_checks_to_be_deployed_v5.2](./Data characterisation/Level_1_checks_to_be_deployed_v5.2)
+       * [Level_2_checks_to_be_deployed2.0](./Data characterisation/Level_2_checks_to_be_deployed2.0)
+       * [Level_3_to_be_deployed1.0](./Data characterisation/Level_3_to_be_deployed1.0)
+
+**Folder structure example**
+<p align="left">
+  <a href="https://github.com/vjolahoxhaj/Level-1-checks">
+    <img src="images/example_folderStructure.png" alt="example" width="284" height="304">
+  </a>
+  </p>
 ### Data characterization study links   
 
 [Level 1 checks](https://github.com/vjolahoxhaj/Level-1-checks?organization=vjolahoxhaj&organization=vjolahoxhaj): Checking the integrity of the ETL procedure.     
