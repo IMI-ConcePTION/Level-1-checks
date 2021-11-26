@@ -132,7 +132,7 @@ Installation steps for Level 1 check:
     * [CDMInstances](./CDMInstances)
         * [Project_name](./CDMInstances/Project_name)
             * [files.csv](./CDMInstances/Project_name/files.csv) (here your files)    
-     * [Data characterisation](./Data characterisation) 
+     * [Data characterisation](./Data_characterisation) 
        * [Level_1_checks_to_be_deployed_v5.2](./Data_characterisation/Level_1_checks_to_be_deployed_v5.2)
        * [Level_2_checks_to_be_deployed2.0](./Data_characterisation/Level_2_checks_to_be_deployed2.0)
        * [Level_3_to_be_deployed1.0](./Data_characterisation/Level_3_to_be_deployed1.0)
