@@ -115,7 +115,7 @@ Installation steps for Level 1 check:
 
 1.	Go to the GitHub page of Level 1 check
 2.	Click the green button **Code** on the top of the GitHub page, download the ZIP folder using the **Download ZIP** button and extract the contents. Remember where you stored the extracted ZIP folder on your computer, you will use it later.
-3.	Create a main folder with the name of your project (`Project_name`). We suggest to use a clear and short name, only using lower-case letters.
+3.	Create a main folder with the name of your project (`Project_name`). We suggest to use a clear and short name, with no spaces in between example ConcePTION, Pfizer etc.  
 4.	Create the folder `Data characterisation` inside the main folder `Project_name`. 
 5.	Copy the folder `Level_1_checks_to_be_deployed_v5.2` from the extracted folder zip file that we downloaded in step 1 inside the new folder `Data characterisation`. 
 6.	Create a folder named `CDMInstances` inside the main folder `Project_name`, which will be used to store the .csv files representing the CDM tables.
@@ -133,16 +133,17 @@ Installation steps for Level 1 check:
         * [Project_name](./CDMInstances/Project_name)
             * [files.csv](./CDMInstances/Project_name/files.csv) (here your files)    
      * [Data characterisation](./Data characterisation) 
-       * [Level_1_checks_to_be_deployed_v5.2](./Data characterisation/Level_1_checks_to_be_deployed_v5.2)
-       * [Level_2_checks_to_be_deployed2.0](./Data characterisation/Level_2_checks_to_be_deployed2.0)
-       * [Level_3_to_be_deployed1.0](./Data characterisation/Level_3_to_be_deployed1.0)
+       * [Level_1_checks_to_be_deployed_v5.2](./Data_characterisation/Level_1_checks_to_be_deployed_v5.2)
+       * [Level_2_checks_to_be_deployed2.0](./Data_characterisation/Level_2_checks_to_be_deployed2.0)
+       * [Level_3_to_be_deployed1.0](./Data_characterisation/Level_3_to_be_deployed1.0)
 
 **Folder structure example**
 <p align="left">
   <a href="https://github.com/vjolahoxhaj/Level-1-checks">
-    <img src="images/example_folderStructure.png" alt="example" width="284" height="304">
+    <img src="images/example_folderStructure.png" alt="example" width="360" height="304">
   </a>
   </p>
+  
 ### Data characterization study links   
 
 [Level 1 checks](https://github.com/vjolahoxhaj/Level-1-checks?organization=vjolahoxhaj&organization=vjolahoxhaj): Checking the integrity of the ETL procedure.     
