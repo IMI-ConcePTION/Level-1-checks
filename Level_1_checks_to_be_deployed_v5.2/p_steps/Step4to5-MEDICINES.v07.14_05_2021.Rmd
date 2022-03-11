@@ -701,10 +701,10 @@ step_4_5_check<- function(tables_list){
 
          #Create a combination variable by combining all columns, keep only that variable
     cols<-colnames(df)
-    dup<-df[, combination := Reduce(function(...) paste(..., sep = "_^_"), .SD[, mget(cols)])][,"combination"]
-    
-    write.csv(dup, paste(tmp,"dup_", tables_list[i],sep="") ,row.names = F)
-    rm(dup)
+    # dup<-df[, combination := Reduce(function(...) paste(..., sep = "_^_"), .SD[, mget(cols)])][,"combination"]
+    # 
+    # write.csv(dup, paste(tmp,"dup_", tables_list[i],sep="") ,row.names = F)
+    # rm(dup)
     
     
   #Create the dataset with the variables needed for distribution of continuous variables
@@ -752,22 +752,22 @@ step_4_5_check<- function(tables_list){
     rm(df)
   }
   
-   #save results for duplicates
-  dup_files<-list.files(tmp, pattern="^dup")
-  if (length(dup_files)>1){
-  dup<-fread(paste0(tmp,dup_files[1]), sep=";")
-  i<-2
-  for (i in 2:length(dup_files)){
-    dup<-rbind(dup,fread(paste0(tmp,dup_files[i]), sep=";"))
-    dup<-dup[duplicated(combination)]
-  }
-  dup<-dup[,.N]
-  } else {
-    dup<-fread(paste0(tmp,dup_files), sep=";")
-    dup<-dup[duplicated(combination)]
-    dup<-dup[,.N]
-  }
-  rm(dup_files)
+  #  #save results for duplicates
+  # dup_files<-list.files(tmp, pattern="^dup")
+  # if (length(dup_files)>1){
+  # dup<-fread(paste0(tmp,dup_files[1]), sep=";")
+  # i<-2
+  # for (i in 2:length(dup_files)){
+  #   dup<-rbind(dup,fread(paste0(tmp,dup_files[i]), sep=";"))
+  #   dup<-dup[duplicated(combination)]
+  # }
+  # dup<-dup[,.N]
+  # } else {
+  #   dup<-fread(paste0(tmp,dup_files), sep=";")
+  #   dup<-dup[duplicated(combination)]
+  #   dup<-dup[,.N]
+  # }
+  # rm(dup_files)
   
   Res.convention<-do.call(rbind, Res.convention)
   
@@ -1223,7 +1223,7 @@ i<-1
  Res.dates.m<-Res.dates.m[meaning !="NA"]
  Res.dates.my<-Res.dates.my[meaning !="NA"]
  
-  output<-list("CONVENTION"= Res.convention, "COUNT1_M"=Res.4.1, "COUNT1_MY"=Res.4.2, "COUNT2_M"=Res.4.3[vocabulary !="NA"], "COUNT2_MY"=Res.4.4[vocabulary !="NA"], "DATES.M"=Res.dates.m, "DATES_MY"=Res.dates.my, "DIST.DISP.M"=dist.disp.m, "DIST.DISP.Y"=dist.disp.y, "DIST.PRES.M"=dist.pres.m, "DIST.PRES.Y"=dist.pres.y, "DIST.DUR.M"=dist.dur.m, "DIST.DUR.Y"=dist.dur.y, "DUP"=dup)
+  output<-list("CONVENTION"= Res.convention, "COUNT1_M"=Res.4.1, "COUNT1_MY"=Res.4.2, "COUNT2_M"=Res.4.3[vocabulary !="NA"], "COUNT2_MY"=Res.4.4[vocabulary !="NA"], "DATES.M"=Res.dates.m, "DATES_MY"=Res.dates.my, "DIST.DISP.M"=dist.disp.m, "DIST.DISP.Y"=dist.disp.y, "DIST.PRES.M"=dist.pres.m, "DIST.PRES.Y"=dist.pres.y, "DIST.DUR.M"=dist.dur.m, "DIST.DUR.Y"=dist.dur.y)
   return(output)
 }
 ```
@@ -1254,13 +1254,14 @@ Conventions:
 Duplicated rows:
 
 ```{r duplicated_rows, echo=FALSE}
-dup<-Results.medicines$DUP
-
-if(dup>0){
-  print(paste0("There are ", dup, " duplicated rows in the data. Take caution when interpreting counts."))
-} else {
-  print("There are no duplicated rows in the data.")
-}
+# dup<-Results.medicines$DUP
+# 
+# if(dup>0){
+#   print(paste0("There are ", dup, " duplicated rows in the data. Take caution when interpreting counts."))
+# } else {
+#   print("There are no duplicated rows in the data.")
+# }
+print("Due to the size of the files this check can not be performed.")
 ```
 
 ## 1. Convention check
