@@ -11,6 +11,10 @@
  <p align="center"> R scripts to check integrity of an ETL to the ConcePTION CDM </p>
  <p align="center"> The repository of this project is now available at this link: https://github.com/UMC-Utrecht-RWE/ConcePTION-Level1 </p>
  
+# THIS REPOSITORY REMAINS READ-ONLY, AND IT WILL BE NO LONGER ACTIVELY MAINTAINED
+
+# IF YOU WOULD LIKE TO RUN THE MOST UPDATED SCRIPTS, PLEASE NOW VISIT [HERE](https://github.com/UMC-Utrecht-RWE/ConcePTION-Level1)
+ 
 <!-- LICENSE -->
 ## License
 
